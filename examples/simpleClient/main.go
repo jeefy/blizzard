@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/FuzzyStatic/blizzard/v3"
+	"github.com/jeefy/blizzard/v3"
 )
 
 var (

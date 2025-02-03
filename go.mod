@@ -1,4 +1,4 @@
-module github.com/FuzzyStatic/blizzard/v3
+module github.com/jeefy/blizzard/v3
 
 go 1.20
 

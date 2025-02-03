@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/FuzzyStatic/blizzard/v3/wow"
-	"github.com/FuzzyStatic/blizzard/v3/wowcgd"
-	"github.com/FuzzyStatic/blizzard/v3/wowsearch"
+	"github.com/jeefy/blizzard/v3/wow"
+	"github.com/jeefy/blizzard/v3/wowcgd"
+	"github.com/jeefy/blizzard/v3/wowsearch"
 )
 
 // ClassicWoWAuctionHouseIndex returns an index of auction houses for a given realmID

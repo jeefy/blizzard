@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/FuzzyStatic/blizzard/v3"
-	"github.com/FuzzyStatic/blizzard/v3/oauth"
+	"github.com/jeefy/blizzard/v3"
+	"github.com/jeefy/blizzard/v3/oauth"
 	"golang.org/x/oauth2"
 )
 
