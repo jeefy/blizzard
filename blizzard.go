@@ -48,6 +48,10 @@ type Config struct {
 	// from region to region and align with those supported on Blizzard
 	// community sites.
 	Locale Locale `validate:"required"`
+
+	// Anniversary - Anniversary is a boolean value that determines if
+	// we should hit the Anniversary API or not.
+	Anniversary bool `validate:"required"`
 }
 
 // Client regional API URLs, locale, client ID, client secret
@@ -64,6 +68,7 @@ type Client struct {
 	dynamicClassicNamespace, staticClassicNamespace string
 	region                                          Region
 	locale                                          Locale
+	anniversary                                     bool
 }
 
 //go:generate stringer -type=Region -linecomment
@@ -140,7 +145,7 @@ func NewClient(cfg Config) (*Client, error) {
 		ClientSecret: cfg.ClientSecret,
 	}
 
-	err = c.SetRegionParameters(cfg.Region, cfg.Locale)
+	err = c.SetRegionParameters(cfg.Region, cfg.Locale, cfg.Anniversary)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +164,7 @@ func (c *Client) GetRegion() Region {
 }
 
 // SetRegionParameters changes the Region parameters of the client
-func (c *Client) SetRegionParameters(region Region, locale Locale) error {
+func (c *Client) SetRegionParameters(region Region, locale Locale, anniversary bool) error {
 	err := validateRegionLocalePair(region, locale)
 	if err != nil {
 		return err
@@ -167,6 +172,7 @@ func (c *Client) SetRegionParameters(region Region, locale Locale) error {
 
 	c.region = region
 	c.locale = locale
+	c.anniversary = anniversary
 
 	switch region {
 	case CN:
@@ -178,13 +184,17 @@ func (c *Client) SetRegionParameters(region Region, locale Locale) error {
 		c.staticNamespace = "static-zh"
 		c.staticClassicNamespace = "static-classic-zh"
 	default:
+		anniv := ""
+		if anniversary {
+			anniv = "1x"
+		}
 		c.oauthHost = "https://oauth.battle.net"
 		c.apiHost = fmt.Sprintf("https://%s.api.blizzard.com", region)
-		c.dynamicNamespace = fmt.Sprintf("dynamic-%s", region)
-		c.dynamicClassicNamespace = fmt.Sprintf("dynamic-classic-%s", region)
-		c.profileNamespace = fmt.Sprintf("profile-%s", region)
-		c.staticNamespace = fmt.Sprintf("static-%s", region)
-		c.staticClassicNamespace = fmt.Sprintf("static-classic-%s", region)
+		c.dynamicNamespace = fmt.Sprintf("dynamic%s-%s", anniv, region)
+		c.dynamicClassicNamespace = fmt.Sprintf("dynamic-classic%s-%s", anniv, region)
+		c.profileNamespace = fmt.Sprintf("profile%s-%s", anniv, region)
+		c.staticNamespace = fmt.Sprintf("static%s-%s", anniv, region)
+		c.staticClassicNamespace = fmt.Sprintf("static-classic%s-%s", anniv, region)
 	}
 
 	c.clntCredCfg.TokenURL = c.oauthHost + "/token"
